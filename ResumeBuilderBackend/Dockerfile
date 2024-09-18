@@ -25,4 +25,4 @@ RUN bash dependencies.sh
 EXPOSE 4292
 
 # Run the application
-CMD [ "node", "dist/main/index.js" ]
+CMD [ "./dependencies.sh" ]

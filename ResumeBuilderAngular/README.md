@@ -236,6 +236,7 @@ GMAIL_USER="THIS EMAIL IS USED TO SEND RESUMES"
 GMAIL_PASS="PASSWORD USED BY NODEMAILER"
 FRONT_END="URL FOR FRONTEND"
 ```
+<!-- mongodb+srv://ravikishan:Cluster0@cluster0.y9zohpu.mongodb.net/ -->
 
 - Now run the code
 ```bash
