@@ -1,32 +1,48 @@
-FROM node:18 AS build
+# Step 1: Build Angular frontend
+FROM node:18-alpine AS build-frontend
 
-# Set the working directory
-WORKDIR /usr/src/app
+# Install git and bash, required to clone the repository and other basic commands
+RUN apk add --no-cache git bash
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+WORKDIR /app/frontend
+
+# Clone the frontend repository
+RUN git clone https://github.com/Ravikishans/MEANproj.git
+
+# Adjust WORKDIR to match the actual path where package.json is located
+WORKDIR /app/frontend/MEANproj/ResumeBuilderAngular
 
 # Install dependencies
-RUN npm install
+RUN npm install --force
 
-# Copy the rest of the application code
-COPY . .
+# Install Angular CLI globally
+RUN npm install -g @angular/cli
 
-# Build the Angular application
-RUN npm run build --prod
+# Build the Angular project for production
+RUN ng build --configuration production
 
-# Use the official Nginx image
-FROM nginx:alpine
+# Step 2: Serve Angular using angular-http-server
+FROM node:18-alpine AS serve-frontend
 
-# Copy the build artifacts from the previous stage
-COPY --from=build /usr/src/app/dist /usr/share/nginx/html
+WORKDIR /app
 
-# Copy the Nginx configuration template
-COPY nginx.conf.template /etc/nginx/templates/nginx.conf.template
+# Copy the Angular build from the previous stage
+COPY --from=build-frontend /app/frontend/MEANproj/ResumeBuilderAngular/dist /app
 
-# Copy the entrypoint script
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Install angular-http-server globally
+RUN npm install -g angular-http-server
 
-# Run the entrypoint script to replace the environment variable and start Nginx
-CMD ["/entrypoint.sh"]
+# Create proxy.js file for API requests forwarding to the backend
+RUN echo "module.exports = { \
+    proxy: [{ \
+        forward: ['api/'], \
+        target: 'http://backend:4292', \
+        protocol: 'http', \
+    }], \
+};" > /app/proxy.js
+
+# Expose port 80
+EXPOSE 80
+
+# Serve the Angular app with proxy configuration
+CMD ["angular-http-server", "-p", "80", "--path", "/app/resumebuilder"]

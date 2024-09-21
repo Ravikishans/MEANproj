@@ -1,28 +1,53 @@
-# Use the official Node.js image.
-# https://hub.docker.com/_/node
-FROM node:18
+# 
+# Step 1: Use Node.js base image
+FROM node:18-alpine
 
-# Set the working directory
-WORKDIR /usr/src/app
+# Step 2: Set working directory
+WORKDIR /app/backend
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# Step 3: Clone the backend repository
+RUN git clone https://github.com/SaiGovardhana/ResumeBuilderBackend.git .
 
-# Install dependencies
+# Step 4: Install Node.js dependencies
 RUN npm install
 
-# Copy the rest of the application code
-COPY . .
+# Step 5: Install Puppeteer dependencies for EC2 (Alpine-based packages)
+RUN apk add --no-cache \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont \
+    libx11 \
+    libxcomposite \
+    libxrender \
+    libxdamage \
+    libxi \
+    libxtst \
+    libnss \
+    libnspr \
+    libatk \
+    libdbus \
+    libexpat \
+    libxrandr \
+    libxfixes \
+    wget \
+    xdg-utils
 
-# Compile TypeScript code
-RUN npm run build
+# Step 6: Install TypeScript globally and compile the TypeScript code
+RUN npm install -g typescript
+RUN tsc
 
-#install dependencies
-COPY dependencies.sh /dependencies.sh
-RUN bash dependencies.sh
+# Step 7: Copy .env file (should be added to your local project or passed at runtime)
+COPY .env /app/backend/.env
 
-# Expose the port
+# Step 8: Expose backend port 4292
 EXPOSE 4292
 
-# Run the application
-CMD [ "./dependencies.sh" ]
+# Step 9: Environment variables for MongoDB (optional if you use .env)
+ENV NODE_ENV=production
+ENV MONGO_URL=mongodb://mongo:27017/resumebuilderdb
+
+# Step 10: Command to start the backend server
+CMD ["nohup", "npm", "start", "&"]

@@ -25,5 +25,9 @@
     "nodemailer": "^6.9.1",
     "openai": "^3.2.1",
     "puppeteer": "^19.7.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node src/main/index.js"
   }
 }
