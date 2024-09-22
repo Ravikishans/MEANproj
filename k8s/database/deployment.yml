@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: databaseRB
+  name: DB_deploy_RB
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: resumebuilder
+  template:
+    metadata:
+      labels:
+        app: resumebuilder
+    spec:
+      containers:
+      - name: resumebuilder
+        image: mongo:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - mountPath: /data/db
+          name: mongodb-storage
+      volumes:
+      - name: mongodb-storage
+        persistentVolumeClaim:
+          claimName: RB-pvc

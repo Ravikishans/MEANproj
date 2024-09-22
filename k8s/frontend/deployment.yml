@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: frontendRB
+  name: FE_deploy_RB
+spec:
+  selector:
+    matchLabels:
+      app: resumebuilder
+  template:
+    metadata:
+      labels:
+        app: resumebuilder
+    spec:
+      containers:
+      - name: resumebuilder
+        image: ravikishans/resumebuilder:fr_angular
+      env:
+      - name: REACT_APP_BACKEND_URL
+        valueFrom:
+          configMapKeyRef:
+            name: RB-config
+            key: REACT_APP_BACKEND_URL
+        # resources:
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "500m"
+        ports:
+        - containerPort: 80
