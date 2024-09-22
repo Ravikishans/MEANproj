@@ -6,10 +6,15 @@ FROM node:18-alpine
 WORKDIR /app/backend
 
 # Step 3: Clone the backend repository
-RUN git clone https://github.com/SaiGovardhana/ResumeBuilderBackend.git .
+RUN apk update && apk add git
+RUN git clone https://github.com/Ravikishans/MEANproj.git .
+
+# Adjust WORKDIR to match the actual path where package.json is located
+WORKDIR /app/backend/MEANproj/ResumeBuilderBackend
+RUN ls -la /app/backend/MEANproj/ResumeBuilderBackend
 
 # Step 4: Install Node.js dependencies
-RUN npm install
+RUN npm install --force
 
 # Step 5: Install Puppeteer dependencies for EC2 (Alpine-based packages)
 RUN apk add --no-cache \
@@ -47,7 +52,6 @@ EXPOSE 4292
 
 # Step 9: Environment variables for MongoDB (optional if you use .env)
 ENV NODE_ENV=production
-ENV MONGO_URL=mongodb://mongo:27017/resumebuilderdb
-
+ENV MONGO_URL=mongodb://ravikishan:Cluster0@cluster0.y9zohpu.mongodb.net:27017/
 # Step 10: Command to start the backend server
 CMD ["nohup", "npm", "start", "&"]

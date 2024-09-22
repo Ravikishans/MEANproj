@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  
+  backend:
+    build:
+      context: ./ResumeBuilderBackend
+      dockerfile: Dockerfile
+    image: ravikishans/meanproj:backend
+    ports:
+      - "4292:4292"
+
+
+  angularcli:
+    build:
+      context: ./ResumeBuilderAngular
+      dockerfile: Dockerfile
+    image: ravikishans/meanproj:frontend
+    ports:
+      - "80:80"
+
+    depends_on:
+      - backend
