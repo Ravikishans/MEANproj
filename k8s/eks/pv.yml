@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  namespace: databaseRB
-  name: RB-pv
+  namespace: databaserb
+  name: rb-pv
 spec:
   capacity:
     storage: 3Gi

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: backendrb
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: frontendrb
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: databaserb

@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  namespace: databaseRB
-  name: RB-pvc
+  namespace: databaserb
+  name: rb-pvc
 spec:
   resources:
     requests:

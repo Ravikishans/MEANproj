@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: backendrb
+  name: be-deploy-rb
+spec:
+  selector:
+    matchLabels:
+      app: resumebuilder
+  template:
+    metadata:
+      labels:
+        app: resumebuilder
+    spec:
+      containers:
+      - name: resumebuilder
+        image: ravikishans/resumebuilder:backend
+        env:
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: backend-secret
+              key: MONGO_URI
+        - name: PORT
+          value: "4292"
+        # resources:
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "500m"
+        ports:
+        - containerPort: 4292
+
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: frontendrb
+  name: fe-deploy-rb
+spec:
+  selector:
+    matchLabels:
+      app: resumebuilder
+  template:
+    metadata:
+      labels:
+        app: resumebuilder
+    spec:
+      containers:
+      - name: resumebuilder
+        image: ravikishans/resumebuilder:fe_angular
+        env:
+        - name: REACT_APP_BACKEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: rb-config
+              key: REACT_APP_BACKEND_URL
+        # resources:
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "500m"
+        ports:
+        - containerPort: 80
+
+
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: databaserb
+  name: db-deploy-rb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: resumebuilder
+  template:
+    metadata:
+      labels:
+        app: resumebuilder
+    spec:
+      containers:
+      - name: resumebuilder
+        image: mongo:latest
+        # resources:
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "500m"
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - mountPath: /data/db
+          name: mongodb-storage
+      volumes:
+      - name: mongodb-storage
+        persistentVolumeClaim:
+          claimName: rb-pvc
