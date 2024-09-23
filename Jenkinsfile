@@ -5,12 +5,12 @@ pipeline {
         DOCKER_REGISTRY = 'ravikishans'
         DOCKER_CREDENTIALS = credentials('ravikishans')
 
-        BACKEND_NAMESPACE = 'backendRB'
-        FRONTEND_NAMESPACE = 'frontendRB'
-        DATABASE_NAMESPACE = 'databaseRB'
+        BACKEND_NAMESPACE = 'backendrb'
+        FRONTEND_NAMESPACE = 'frontendrb'
+        DATABASE_NAMESPACE = 'databaserb'
 
         HELM_RELEASE_NAME = "resumebuilder"
-        HELM_CHART_PATH = '.k8s/helm-package/resumebuilder'
+        HELM_CHART_PATH = './k8s/resumebuilder'
     }
 
     stages {
@@ -40,7 +40,7 @@ pipeline {
                 script {
                     withCredentials([file(credentialsId: 'jubeconfig-credentials', variable: 'KUBECONFIG')])
                         sh """
-                            helm upgrade --install ${HELM_RELEASE_NAME} ${HELM_CHART_PATH} \ --nsmespace default --create-namespace \ --kubeconfig=$KUBECONFIG --debug
+                            helm upgrade --install ${HELM_RELEASE_NAME} ${HELM_CHART_PATH} --nsmespace default --create-namespace --kubeconfig=$KUBECONFIG --debug
                         """    
                 }
             }
