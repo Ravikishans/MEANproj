@@ -1,0 +1,25 @@
+# Backend namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.backend.namespace }}
+  labels:
+    name: {{ .Values.backend.namespace }}
+
+---
+# Frontend namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.frontend.namespace }}
+  labels:
+    name: {{ .Values.frontend.namespace }}
+
+---
+# Database namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.database.namespace }}
+  labels:
+    name: {{ .Values.database.namespace }}

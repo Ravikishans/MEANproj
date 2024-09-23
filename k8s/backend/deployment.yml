@@ -23,9 +23,9 @@ spec:
               key: MONGO_URI
         - name: PORT
           value: "4292"
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
+        # resources:
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "500m"
         ports:
         - containerPort: 4292

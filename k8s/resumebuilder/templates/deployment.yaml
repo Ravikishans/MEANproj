@@ -1,0 +1,92 @@
+#backend deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.backend.namespace }}
+  name: {{ .Release.Name }}-be-deploy
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-be-rb
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-be-rb
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-be-rb
+        image: {{ .Values.backend.image }}
+        env:
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-be-secret
+              key: MONGO_URI
+        - name: PORT
+          value: {{ .Values.backend.env.PORT | quote }}
+        # resources:
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "500m"
+        ports:
+        - containerPort: {{ .Values.backend.ports.containerPort }}
+
+---
+
+#forntend deploy
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-fe-deploy
+  namespace: {{ .Values.frontend.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-fe-rb
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-fe-rb
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-fe-rb
+        image: {{ .Values.frontend.image }}
+        env:
+        - name: REACT_APP_BACKEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Release.Name }}-configmap-rb
+              key: REACT_APP_BACKEND_URL
+        ports:
+        - containerPort: {{ .Values.frontend.service.targetPort }} 
+
+---
+
+#database deploy
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-db-deploy
+  namespace: {{ .Values.database.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-db-rb
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-db-rb
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-db-rb
+        image: {{ .Values.database.image }}
+        ports:
+        - containerPort: {{ .Values.database.service.targetPort }}
+        volumeMounts:
+        - mountPath: /data/db
+          name: mongodb-storage
+      volumes:
+      - name: mongodb-storage
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-pvc

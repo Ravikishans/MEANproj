@@ -1,0 +1,39 @@
+frontend:
+  namespace: frontend-rb
+  image: ravikishans/resumebuilder:fe_angular
+  replicas: 1
+  service:
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  data:
+    REACT_APP_BACKEND_URL: "http://localhost:4292"
+  app:
+    name: resumebuilder
+
+backend:
+  namespace: backend-rb
+  image: ravikishans/resumebuilder:backend
+  replicas: 1
+  env:
+    MONGO_URL: "mongodb+srv://ravikishan:Cluster0@cluster0.y9zohpu.mongodb.net/resumeai"
+    PORT: "4292"
+  ports:
+    containerPort: 4292
+    protocol: TCP
+  service:
+    port: 4292
+  app:
+    name: resumebuilder
+
+database:
+  namespace: database-rb
+  image: mongo:latest
+  pvc:
+    storage: 3Gi
+  service:
+    protocol: TCP
+    port: 27017
+    targetPort: 27017
+  app:
+    name: resumebuilder

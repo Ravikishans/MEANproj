@@ -1,0 +1,47 @@
+#backend service
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Values.backend.namespace }}
+  name: {{ .Release.Name }}-be-service
+spec:
+  selector:
+    app: {{ .Release.Name }}-be-rb
+  ports:
+  - protocol: {{ .Values.backend.ports.protocol }}
+    port: {{ .Values.backend.service.port }}
+    targetPort: {{ .Values.backend.ports.containerPort}}
+
+---
+#frontend service
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Values.frontend.namespace }}
+  name: {{ .Release.Name }}-fe-service
+spec:
+  selector:
+    app: {{ .Release.Name }}-fe-rb
+  ports:
+  - protocol: {{ .Values.frontend.service.protocol }}
+    port: {{ .Values.frontend.service.port }}
+    targetPort: {{ .Values.frontend.service.targetPort }}
+
+
+---
+#database service
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Values.database.namespace }}
+  name: {{ .Release.Name }}-db-service
+spec:
+  selector:
+    app: {{ .Release.Name }}-db-rb
+  ports:
+  - protocol: {{ .Values.database.service.protocol }}
+    port: {{ .Values.database.service.port }}
+    targetPort: {{ .Values.database.service.targetPort }}
+  type: ClusterIP
+
+
