@@ -41,7 +41,7 @@ pipeline {
                     OPENAI_KEY="OPENAI_API_KEY"
                     GMAIL_USER="ravikishan1996@gmail.com"
                     GMAIL_PASS="123456789"
-                    FRONT_END="http://localhost:80"' > ./ResummeBuilderBackend/.env
+                    FRONT_END="http://localhost:80"' > ./ResumeBuilderBackend/.env
                     """
                 }
             }
