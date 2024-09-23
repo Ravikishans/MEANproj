@@ -22,6 +22,15 @@ pipeline {
                 }
             }
         }
+        stage("ls") {
+            steps {
+                script {
+                    sh """
+                    ls -al
+                    """
+                }
+            }
+        }
 
         stage ("add .env in backend") {
             steps {
