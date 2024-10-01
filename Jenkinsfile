@@ -43,7 +43,7 @@ pipeline {
                     GMAIL_PASS="123456789"
                     FRONT_END="http://localhost:80"' > ./ResumeBuilderBackend/.env
 
-                    ls -al
+                    ls -al ./ResumeBuilderBackend
                     """
                 }
             }
@@ -55,7 +55,7 @@ pipeline {
                     sh """
                     echo BACKEND_URL = "http://localhost:4292" > ./ResumeBuilderAngular/.env
 
-                    ls -al
+                    ls -al ./ResumeBuilderAngular
                     """
                 }
             }
