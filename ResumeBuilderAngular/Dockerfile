@@ -10,7 +10,7 @@ WORKDIR /app/frontend
 RUN git clone https://github.com/Ravikishans/MEANproj.git
 
 # Adjust WORKDIR to match the actual path where package.json is located
-WORKDIR /app/frontend/MEANproj/ResumeBuilderAngular
+WORKDIR /app/frontend/ResumeBuilderAngular
 RUN ls -al
 
 # Install dependencies
