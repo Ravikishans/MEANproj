@@ -9,6 +9,9 @@ WORKDIR /app/backend
 RUN apk update && apk add git
 RUN git clone https://github.com/Ravikishans/MEANproj.git .
 
+# Step 4: List the directory to ensure correct structure
+RUN ls -R /app/backend
+
 # Adjust WORKDIR to match the actual path where package.json is located
 WORKDIR /app/backend/MEANproj/ResumeBuilderBackend
 RUN ls -la
