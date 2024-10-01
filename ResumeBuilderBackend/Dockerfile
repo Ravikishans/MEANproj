@@ -10,9 +10,9 @@ RUN apk update && apk add git
 RUN git clone https://github.com/Ravikishans/MEANproj.git .
 
 # Adjust WORKDIR to match the actual path where package.json is located
-WORKDIR /app/backend/MEANproj/ResumeBuilderBackend
-RUN ls -la /app/backend/MEANproj/ResumeBuilderBackend
-
+# WORKDIR /app/backend/MEANproj/ResumeBuilderBackend
+# RUN ls -la /app/backend/MEANproj/ResumeBuilderBackend
+RUN cd ./MEANproj/ResumeBuilderBackend
 # Step 4: Install Node.js dependencies
 RUN npm install --force
 
