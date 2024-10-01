@@ -84,7 +84,7 @@ pipeline {
         stage('verify deployment') {
             steps {
                 script{
-                    withCredentials([file(credentialsId: 'jubeconfig-credentials', variable: 'KUBECONFIG')])
+                    withCredentials([file(credentialsId: 'kubeconfig-credentials', variable: 'KUBECONFIG')])
                         sh "kubectl get pods -n ${BACKEND_NAMESPACE} --kubeconfig=$KUBECONFIG"
                         sh "kubectl get pods -n ${FRONTEND_NAMESPACE} --kubeconfig=$KUBECONFIG"
                         sh "kubectl get pods -n ${DATABASE_NAMESPACE} --kubeconfig=$KUBECONFIG"
