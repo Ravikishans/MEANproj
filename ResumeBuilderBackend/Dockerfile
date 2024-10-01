@@ -13,7 +13,7 @@ RUN git clone https://github.com/Ravikishans/MEANproj.git .
 RUN ls -R /app/backend
 
 # Adjust WORKDIR to match the actual path where package.json is located
-WORKDIR /app/backend/MEANproj/ResumeBuilderBackend
+WORKDIR /app/backend/ResumeBuilderBackend
 RUN ls -la
 # Step 4: Install Node.js dependencies
 RUN npm install --force
