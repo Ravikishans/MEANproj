@@ -73,7 +73,7 @@ pipeline {
         stage ('deploy to kubernates using helm') {
             steps {
                 script {
-                    withCredentials([file(credentialsId: 'jubeconfig-credentials', variable: 'KUBECONFIG')])
+                    withCredentials([file(credentialsId: 'kubeconfig-credentials', variable: 'KUBECONFIG')])
                         sh """
                             helm upgrade --install ${HELM_RELEASE_NAME} ${HELM_CHART_PATH} --nsmespace default --create-namespace --kubeconfig=$KUBECONFIG --debug
                         """    
